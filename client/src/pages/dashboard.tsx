@@ -132,6 +132,7 @@ export default function Dashboard() {
         portfolio={walletPortfolio} 
         isLoading={isConnected && !isWrongNetwork ? walletLoading : portfolioLoading}
         isLive={isConnected && !isWrongNetwork}
+        holdings={displayHoldings}
       />
 
       <PortfolioChart 
