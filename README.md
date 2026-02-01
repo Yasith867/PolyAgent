@@ -98,6 +98,12 @@ The application will be available at `http://localhost:5000`
 
 **Polygon Buildathon Wave 5** - Demonstrating the power of AI-assisted DeFi portfolio management on Polygon network.
 
+## Polygon Resources
+
+- [Polygon Documentation](https://docs.polygon.technology/) - Official developer docs
+- [Polygon GitHub](https://github.com/0xpolygon) - Open source repositories
+- [Polygon Website](https://polygon.technology/) - Learn more about Polygon
+
 ## License
 
 MIT
