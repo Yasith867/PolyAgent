@@ -44,8 +44,16 @@ POL, WPOL, MATIC, USDC, USDT, WETH, WBTC, AAVE, LINK, UNI, QUICK, DAI, SPORK, SW
 ### Environment Variables
 ```
 DATABASE_URL=your_postgres_connection_string
-OPENAI_API_KEY=your_openai_key
 SESSION_SECRET=your_session_secret
+
+# AI Provider (choose one):
+
+# Option 1: Cloudflare Workers AI (recommended - free tier available)
+CLOUDFLARE_ACCOUNT_ID=your_account_id
+CLOUDFLARE_API_TOKEN=your_api_token
+
+# Option 2: OpenAI API
+OPENAI_API_KEY=your_openai_key
 ```
 
 ### Installation

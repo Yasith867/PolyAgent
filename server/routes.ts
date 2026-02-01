@@ -5,6 +5,7 @@ import OpenAI from "openai";
 import { aiChatRequestSchema, aiAnalyzeRequestSchema } from "@shared/schema";
 import { getWalletTokenBalances } from "./polygon-service";
 import { z } from "zod";
+import { cloudflareChat, cloudflareChatStream, isCloudflareConfigured } from "./cloudflare-ai";
 
 const walletAddressSchema = z.object({
   address: z.string().regex(/^0x[a-fA-F0-9]{40}$/, "Invalid Ethereum address"),
@@ -14,6 +15,8 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY || process.env.AI_INTEGRATIONS_OPENAI_API_KEY,
   baseURL: process.env.AI_INTEGRATIONS_OPENAI_BASE_URL || undefined,
 });
+
+const useCloudflare = isCloudflareConfigured();
 
 export async function registerRoutes(
   httpServer: Server,
@@ -182,23 +185,36 @@ When discussing strategies, include:
 - Protocol name
 - Brief explanation of the strategy`;
 
-      const stream = await openai.chat.completions.create({
-        model: "gpt-5.2",
-        messages: [
-          { role: "system", content: systemPrompt },
-          ...messages,
-        ],
-        stream: true,
-        max_completion_tokens: 2048,
-      });
-
       let fullResponse = "";
 
-      for await (const chunk of stream) {
-        const content = chunk.choices[0]?.delta?.content || "";
-        if (content) {
+      if (useCloudflare) {
+        const allMessages = [
+          { role: "system" as const, content: systemPrompt },
+          ...messages,
+        ];
+        
+        const streamGen = cloudflareChatStream(allMessages, 2048);
+        for await (const content of streamGen) {
           fullResponse += content;
           res.write(`data: ${JSON.stringify({ content })}\n\n`);
+        }
+      } else {
+        const stream = await openai.chat.completions.create({
+          model: "gpt-4o",
+          messages: [
+            { role: "system", content: systemPrompt },
+            ...messages,
+          ],
+          stream: true,
+          max_completion_tokens: 2048,
+        });
+
+        for await (const chunk of stream) {
+          const content = chunk.choices[0]?.delta?.content || "";
+          if (content) {
+            fullResponse += content;
+            res.write(`data: ${JSON.stringify({ content })}\n\n`);
+          }
         }
       }
 
@@ -238,19 +254,27 @@ When discussing strategies, include:
         ? `Analyze the risk level of a portfolio with these holdings: ${holdings.map((h) => `${h.symbol}: $${h.valueUsd}`).join(", ")}. Provide a brief risk assessment.`
         : `Identify yield opportunities for a portfolio on Polygon with value $${portfolio?.totalValueUsd}. Suggest 2-3 specific DeFi strategies.`;
 
-      const response = await openai.chat.completions.create({
-        model: "gpt-5.2",
-        messages: [
-          {
-            role: "system",
-            content: "You are a DeFi analyst. Provide concise, actionable insights.",
-          },
-          { role: "user", content: prompt },
-        ],
-        max_completion_tokens: 512,
-      });
+      let content: string;
 
-      const content = response.choices[0]?.message?.content || "";
+      if (useCloudflare) {
+        content = await cloudflareChat([
+          { role: "system", content: "You are a DeFi analyst. Provide concise, actionable insights." },
+          { role: "user", content: prompt },
+        ], 512);
+      } else {
+        const response = await openai.chat.completions.create({
+          model: "gpt-4o",
+          messages: [
+            {
+              role: "system",
+              content: "You are a DeFi analyst. Provide concise, actionable insights.",
+            },
+            { role: "user", content: prompt },
+          ],
+          max_completion_tokens: 512,
+        });
+        content = response.choices[0]?.message?.content || "";
+      }
 
       const insight = await storage.createInsight({
         portfolioId: portfolioId || 1,
