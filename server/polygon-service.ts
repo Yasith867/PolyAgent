@@ -11,6 +11,8 @@ const ERC20_ABI = [
 
 const POPULAR_POLYGON_TOKENS = [
   { symbol: "MATIC", name: "Polygon", address: "native", decimals: 18 },
+  { symbol: "POL", name: "Polygon Ecosystem Token", address: "0x0000000000000000000000000000000000001010", decimals: 18 },
+  { symbol: "WPOL", name: "Wrapped POL", address: "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270", decimals: 18 },
   { symbol: "USDC", name: "USD Coin", address: "0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359", decimals: 6 },
   { symbol: "USDT", name: "Tether USD", address: "0xc2132D05D31c914a87C6611C10748AEb04B58e8F", decimals: 6 },
   { symbol: "WETH", name: "Wrapped Ether", address: "0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619", decimals: 18 },
@@ -20,6 +22,9 @@ const POPULAR_POLYGON_TOKENS = [
   { symbol: "UNI", name: "Uniswap", address: "0xb33EaAd8d922B1083446DC23f610c2567fB5180f", decimals: 18 },
   { symbol: "QUICK", name: "QuickSwap", address: "0xB5C064F955D8e7F38fE0460C556a72987494eE17", decimals: 18 },
   { symbol: "DAI", name: "Dai Stablecoin", address: "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063", decimals: 18 },
+  { symbol: "SPORK", name: "SporkDAO", address: "0x9CA6a77C8B38159fd2dA9Bd25bc3E259C33F5E39", decimals: 18 },
+  { symbol: "SWOL", name: "Swol", address: "0x19Cd9B8e42f3b8d7AE7a3aefF5aAa5e5C7e89c8e", decimals: 18 },
+  { symbol: "IDO", name: "IDO Token", address: "0xaC6Df26a590F08dcC95D5a4705ae8abbc88509Ef", decimals: 18 },
 ];
 
 export interface TokenBalance {
@@ -34,6 +39,8 @@ export interface TokenBalance {
 
 const COINGECKO_IDS: Record<string, string> = {
   MATIC: "matic-network",
+  POL: "polygon-ecosystem-token",
+  WPOL: "polygon-ecosystem-token",
   USDC: "usd-coin",
   USDT: "tether",
   WETH: "weth",

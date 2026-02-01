@@ -9,6 +9,7 @@ import type { AiChat } from "@shared/schema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { formatDistanceToNow } from "date-fns";
+import ReactMarkdown from "react-markdown";
 
 interface ChatInterfaceProps {
   portfolioId?: number;
@@ -161,7 +162,13 @@ export function ChatInterface({ portfolioId = 1 }: ChatInterfaceProps) {
                       : "bg-muted"
                   }`}
                 >
-                  <p className="text-sm whitespace-pre-wrap">{chat.content}</p>
+                  {chat.role === "user" ? (
+                    <p className="text-sm whitespace-pre-wrap">{chat.content}</p>
+                  ) : (
+                    <div className="text-sm prose prose-sm dark:prose-invert max-w-none prose-p:my-1 prose-headings:my-2 prose-ul:my-1 prose-li:my-0.5 prose-strong:text-foreground">
+                      <ReactMarkdown>{chat.content}</ReactMarkdown>
+                    </div>
+                  )}
                   <p className={`text-xs mt-1 ${chat.role === "user" ? "text-primary-foreground/70" : "text-muted-foreground"}`}>
                     {chat.createdAt && formatDistanceToNow(new Date(chat.createdAt), { addSuffix: true })}
                   </p>
@@ -180,14 +187,16 @@ export function ChatInterface({ portfolioId = 1 }: ChatInterfaceProps) {
                   <Bot className="w-4 h-4 text-primary" />
                 </div>
                 <div className="max-w-[80%] rounded-lg p-3 bg-muted">
-                  <p className="text-sm whitespace-pre-wrap">
-                    {streamingMessage || (
-                      <span className="flex items-center gap-2">
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                        Thinking...
-                      </span>
-                    )}
-                  </p>
+                  {streamingMessage ? (
+                    <div className="text-sm prose prose-sm dark:prose-invert max-w-none prose-p:my-1 prose-headings:my-2 prose-ul:my-1 prose-li:my-0.5 prose-strong:text-foreground">
+                      <ReactMarkdown>{streamingMessage}</ReactMarkdown>
+                    </div>
+                  ) : (
+                    <span className="flex items-center gap-2 text-sm">
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      Thinking...
+                    </span>
+                  )}
                 </div>
               </div>
             )}
