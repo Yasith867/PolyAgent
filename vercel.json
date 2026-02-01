@@ -3,14 +3,12 @@
     "outputDirectory": "dist/public",
     "rewrites": [
         {
+            "source": "/api/health",
+            "destination": "/api/health.ts"
+        },
+        {
             "source": "/api/(.*)",
             "destination": "/api/index.ts"
         }
-    ],
-    "functions": {
-        "api/*.ts": {
-            "memory": 3008,
-            "maxDuration": 60
-        }
-    }
+    ]
 }

@@ -1,53 +1,26 @@
-import { registerRoutes } from "../server/routes";
-import { createServer } from "http";
-import express from "express";
+// Simple test endpoint to verify serverless functions work
+export default function handler(req: any, res: any) {
+  // Set CORS headers
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-// Create Express app
-const app = express();
-const server = createServer(app);
+  // Handle OPTIONS request
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
 
-// Basic middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-
-// Simple health check that always works
-app.get("/api/health", (req, res) => {
-  res.json({
+  // Return simple response
+  return res.status(200).json({
     status: "ok",
+    message: "API is working!",
     timestamp: new Date().toISOString(),
-    version: "1.0.0"
-  });
-});
-
-// Initialize routes once
-let routesInitialized = false;
-
-async function ensureRoutes() {
-  if (!routesInitialized) {
-    try {
-      await registerRoutes(server, app);
-      routesInitialized = true;
-      console.log("[API] Routes initialized successfully");
-    } catch (error) {
-      console.error("[API] Failed to initialize routes:", error);
-      throw error;
+    method: req.method,
+    url: req.url,
+    env: {
+      hasDatabase: !!process.env.DATABASE_URL,
+      hasCloudflare: !!(process.env.CLOUDFLARE_ACCOUNT_ID && process.env.CLOUDFLARE_API_TOKEN),
+      nodeEnv: process.env.NODE_ENV
     }
-  }
-}
-
-// Main handler
-export default async function handler(req: any, res: any) {
-  try {
-    // Initialize routes if needed
-    await ensureRoutes();
-
-    // Handle the request
-    return app(req, res);
-  } catch (error) {
-    console.error("[API] Request failed:", error);
-    return res.status(500).json({
-      error: "Internal server error",
-      message: error instanceof Error ? error.message : String(error)
-    });
-  }
+  });
 }
