@@ -3,6 +3,12 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import OpenAI from "openai";
 import { aiChatRequestSchema, aiAnalyzeRequestSchema } from "@shared/schema";
+import { getWalletTokenBalances } from "./polygon-service";
+import { z } from "zod";
+
+const walletAddressSchema = z.object({
+  address: z.string().regex(/^0x[a-fA-F0-9]{40}$/, "Invalid Ethereum address"),
+});
 
 const openai = new OpenAI({
   apiKey: process.env.AI_INTEGRATIONS_OPENAI_API_KEY,
@@ -258,6 +264,22 @@ When discussing strategies, include:
     } catch (error) {
       console.error("Error generating insight:", error);
       res.status(500).json({ error: "Failed to generate insight" });
+    }
+  });
+
+  // Wallet token balances - fetch real on-chain data
+  app.get("/api/wallet/:address/balances", async (req, res) => {
+    try {
+      const validation = walletAddressSchema.safeParse({ address: req.params.address });
+      if (!validation.success) {
+        return res.status(400).json({ error: "Invalid wallet address" });
+      }
+      
+      const balances = await getWalletTokenBalances(validation.data.address);
+      res.json(balances);
+    } catch (error) {
+      console.error("Error fetching wallet balances:", error);
+      res.status(500).json({ error: "Failed to fetch wallet balances" });
     }
   });
 
