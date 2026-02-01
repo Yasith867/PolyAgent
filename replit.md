@@ -83,9 +83,18 @@ Located in `server/replit_integrations/` and `client/replit_integrations/`:
 - **OpenAI API**: Used for chat completions, audio processing, and image generation
 - Environment variables: `AI_INTEGRATIONS_OPENAI_API_KEY`, `AI_INTEGRATIONS_OPENAI_BASE_URL`
 
+### Web3 Wallet Integration
+- **Library**: ethers.js v6 for Ethereum/Polygon blockchain interaction
+- **Wallet Context**: `client/src/contexts/wallet-context.tsx` provides connect/disconnect/switchToPolygon functions
+- **Session Persistence**: Wallet state rehydrates on mount via eth_accounts
+- **Connect Button**: `client/src/components/wallet/connect-wallet-button.tsx` with dropdown menu for connected state
+- **Balance Fetching**: `server/polygon-service.ts` queries ERC20 token balances from Polygon RPC
+- **Price Data**: CoinGecko API with 60-second in-memory caching and stale fallback
+- **API Endpoint**: GET `/api/wallet/:address/balances` returns token balances with USD values
+
 ### Key NPM Packages
-- **Frontend**: React, TanStack Query, Recharts (charting), date-fns, wouter
-- **Backend**: Express, pg (PostgreSQL client), OpenAI SDK
+- **Frontend**: React, TanStack Query, Recharts (charting), date-fns, wouter, ethers
+- **Backend**: Express, pg (PostgreSQL client), OpenAI SDK, ethers
 - **Shared**: Zod (validation), drizzle-zod (schema validation)
 
 ### Development Tools
