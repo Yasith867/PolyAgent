@@ -1,0 +1,35 @@
+# Dependencies
+node_modules
+npm-debug.log
+
+# Environment files (will be set in Vercel dashboard)
+.env
+.env.local
+.env.*.local
+
+# Development
+.replit
+.git
+.gitignore
+
+# Build artifacts
+.local
+dist
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+coverage
+.nyc_output
+
+# Misc
+*.log
