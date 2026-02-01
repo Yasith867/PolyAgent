@@ -9,6 +9,7 @@ import { formatDistanceToNow } from "date-fns";
 interface AiInsightsPanelProps {
   insights?: AiInsight[];
   isLoading?: boolean;
+  isDemo?: boolean;
 }
 
 const severityConfig = {
@@ -25,7 +26,7 @@ const typeLabels: Record<string, string> = {
   opportunity: "Opportunity",
 };
 
-export function AiInsightsPanel({ insights, isLoading }: AiInsightsPanelProps) {
+export function AiInsightsPanel({ insights, isLoading, isDemo }: AiInsightsPanelProps) {
   if (isLoading) {
     return (
       <Card className="h-full">
@@ -61,6 +62,11 @@ export function AiInsightsPanel({ insights, isLoading }: AiInsightsPanelProps) {
         <CardTitle className="flex items-center gap-2">
           <Sparkles className="w-4 h-4 text-primary" />
           AI Insights
+          {isDemo && (
+            <Badge variant="outline" className="text-muted-foreground text-xs">
+              Demo
+            </Badge>
+          )}
         </CardTitle>
         <Badge variant="secondary">{displayInsights.length} new</Badge>
       </CardHeader>

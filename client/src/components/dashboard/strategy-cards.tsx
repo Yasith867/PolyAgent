@@ -8,6 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 interface StrategyCardsProps {
   strategies?: Strategy[];
   isLoading?: boolean;
+  isDemo?: boolean;
 }
 
 const riskColors = {
@@ -24,7 +25,7 @@ const typeIcons: Record<string, typeof Zap> = {
   staking: Shield,
 };
 
-export function StrategyCards({ strategies, isLoading }: StrategyCardsProps) {
+export function StrategyCards({ strategies, isLoading, isDemo }: StrategyCardsProps) {
   if (isLoading) {
     return (
       <Card>
@@ -60,7 +61,14 @@ export function StrategyCards({ strategies, isLoading }: StrategyCardsProps) {
   return (
     <Card data-testid="card-strategies">
       <CardHeader className="flex flex-row items-center justify-between gap-1">
-        <CardTitle>Recommended Strategies</CardTitle>
+        <CardTitle className="flex items-center gap-2">
+          Recommended Strategies
+          {isDemo && (
+            <Badge variant="outline" className="text-muted-foreground text-xs">
+              Demo
+            </Badge>
+          )}
+        </CardTitle>
         <Button variant="ghost" size="sm" data-testid="button-view-all-strategies">
           View All <ArrowRight className="w-4 h-4 ml-1" />
         </Button>

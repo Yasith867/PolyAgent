@@ -15,9 +15,10 @@ import {
 interface TokenHoldingsTableProps {
   holdings?: TokenHolding[];
   isLoading?: boolean;
+  isLive?: boolean;
 }
 
-export function TokenHoldingsTable({ holdings, isLoading }: TokenHoldingsTableProps) {
+export function TokenHoldingsTable({ holdings, isLoading, isLive }: TokenHoldingsTableProps) {
   if (isLoading) {
     return (
       <Card>
@@ -47,7 +48,15 @@ export function TokenHoldingsTable({ holdings, isLoading }: TokenHoldingsTablePr
   return (
     <Card data-testid="card-token-holdings">
       <CardHeader className="flex flex-row items-center justify-between gap-1">
-        <CardTitle>Token Holdings</CardTitle>
+        <CardTitle className="flex items-center gap-2">
+          Token Holdings
+          {isLive && (
+            <Badge variant="secondary" className="bg-chart-2/10 text-chart-2 text-xs">
+              <div className="w-1 h-1 rounded-full bg-chart-2 mr-1 animate-pulse" />
+              Live
+            </Badge>
+          )}
+        </CardTitle>
         <Badge variant="secondary">{displayHoldings.length} tokens</Badge>
       </CardHeader>
       <CardContent>
@@ -58,7 +67,7 @@ export function TokenHoldingsTable({ holdings, isLoading }: TokenHoldingsTablePr
               <TableHead className="text-right">Amount</TableHead>
               <TableHead className="text-right">Price</TableHead>
               <TableHead className="text-right">Value</TableHead>
-              <TableHead className="text-right">24h</TableHead>
+              {!isLive && <TableHead className="text-right">24h</TableHead>}
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -82,7 +91,7 @@ export function TokenHoldingsTable({ holdings, isLoading }: TokenHoldingsTablePr
                     </div>
                   </TableCell>
                   <TableCell className="text-right font-mono text-sm">
-                    {parseFloat(holding.amount).toLocaleString("en-US", { maximumFractionDigits: 4 })}
+                    {parseFloat(holding.amount).toLocaleString("en-US", { maximumFractionDigits: 6 })}
                   </TableCell>
                   <TableCell className="text-right font-mono text-sm">
                     ${holding.priceUsd ? parseFloat(holding.priceUsd).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 6 }) : "0.00"}
@@ -90,14 +99,16 @@ export function TokenHoldingsTable({ holdings, isLoading }: TokenHoldingsTablePr
                   <TableCell className="text-right font-mono text-sm font-medium">
                     ${holding.valueUsd ? parseFloat(holding.valueUsd).toLocaleString("en-US", { minimumFractionDigits: 2 }) : "0.00"}
                   </TableCell>
-                  <TableCell className="text-right">
-                    <div className={`flex items-center justify-end gap-1 ${isPositive ? "text-chart-2" : "text-chart-5"}`}>
-                      {isPositive ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
-                      <span className="text-sm font-medium">
-                        {isPositive ? "+" : ""}{change.toFixed(2)}%
-                      </span>
-                    </div>
-                  </TableCell>
+                  {!isLive && (
+                    <TableCell className="text-right">
+                      <div className={`flex items-center justify-end gap-1 ${isPositive ? "text-chart-2" : "text-chart-5"}`}>
+                        {isPositive ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
+                        <span className="text-sm font-medium">
+                          {isPositive ? "+" : ""}{change.toFixed(2)}%
+                        </span>
+                      </div>
+                    </TableCell>
+                  )}
                 </TableRow>
               );
             })}
@@ -105,7 +116,9 @@ export function TokenHoldingsTable({ holdings, isLoading }: TokenHoldingsTablePr
         </Table>
         {displayHoldings.length === 0 && (
           <div className="text-center py-8 text-muted-foreground">
-            No token holdings yet. Add tokens to your portfolio to get started.
+            {isLive 
+              ? "No tokens found in your wallet. Connect to Polygon network to see your holdings."
+              : "No token holdings yet. Add tokens to your portfolio to get started."}
           </div>
         )}
       </CardContent>
