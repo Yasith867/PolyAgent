@@ -98,42 +98,6 @@ The application will be available at `http://localhost:5000`
 
 **Polygon Buildathon Wave 5** - Demonstrating the power of AI-assisted DeFi portfolio management on Polygon network.
 
-## Why Polygon?
-
-Polygon is purpose-built to scale money, trusted by leading enterprises like Stripe, Revolut, Google, and Reddit. Key stats:
-
-| Metric | Value |
-|--------|-------|
-| Total Transactions | 5.3B+ |
-| Unique Addresses | 117M+ |
-| Stablecoin Supply | $3B+ |
-| Average Transaction Cost | ~$0.001 |
-| Block Time | ~2 seconds |
-| Finality | ~5 seconds |
-| Uptime | 99.99% |
-
-### Polygon Features
-- **Instant Settlement** - ~5s finality and 2s blocktimes
-- **Low Cost** - Pay $0.001 to settle on-chain
-- **Enterprise Ready** - Wallets, onramps, and compliance-ready infrastructure
-- **Deep Liquidity** - Billions in stablecoins and every major asset
-- **Account Abstraction** - Email logins, social recovery, sponsored gas
-
-### Use Cases on Polygon
-- **Payments** - Real-time money movement, no weekend breaks
-- **Stablecoins** - $3B+ in liquidity with full reserve coverage
-- **RWA Tokenization** - $1.14B+ in tokenized real-world assets
-- **DeFi** - Borrow, swap, and access liquidity 24/7
-
-## Polygon Resources
-
-- [Polygon Documentation](https://docs.polygon.technology/) - Official developer docs
-- [Polygon PoS Chain](https://docs.polygon.technology/pos/) - EVM chain focused on low cost, high throughput
-- [Developer Tools](https://docs.polygon.technology/tools/) - Third-party integrations and security
-- [Polygon Portal](https://portal.polygon.technology/) - Bridge and wallet tools
-- [Polygon GitHub](https://github.com/0xpolygon) - Open source repositories
-- [Polygon Website](https://polygon.technology/) - Learn more about Polygon
-
 ## License
 
 MIT
