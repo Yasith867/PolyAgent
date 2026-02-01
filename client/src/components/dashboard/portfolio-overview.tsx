@@ -45,7 +45,7 @@ export function PortfolioOverview({ portfolio, isLoading, isLive }: PortfolioOve
     {
       title: "24h PnL",
       value: isLive 
-        ? "—" 
+        ? "Coming Soon" 
         : `${isPositive ? "+" : ""}$${(totalValue * (dailyChange / 100)).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
       change: isLive ? "Requires historical data" : "vs. yesterday",
       isPositive,
@@ -54,7 +54,7 @@ export function PortfolioOverview({ portfolio, isLoading, isLive }: PortfolioOve
     },
     {
       title: "Active Strategies",
-      value: isLive ? "—" : "3",
+      value: isLive ? "Coming Soon" : "3",
       change: isLive ? "Connect to protocols" : "Optimizing yield",
       isPositive: true,
       icon: Zap,
@@ -62,7 +62,7 @@ export function PortfolioOverview({ portfolio, isLoading, isLive }: PortfolioOve
     },
     {
       title: "Risk Score",
-      value: isLive ? "—" : "Medium",
+      value: isLive ? "Coming Soon" : "Medium",
       change: isLive ? "Requires analysis" : "Well balanced",
       isPositive: true,
       icon: Shield,
